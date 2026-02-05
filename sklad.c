@@ -3,29 +3,35 @@
 
 #define MAX_PRODUKTU 10
 
+// Struktura Produkt – reprezentuje jeden produkt ve skladu
 typedef struct {
     char nazev[50];
     float cena;
     int kusy;
 } Produkt;
 
+// Funkce odstraní
 void odstranNovyRadek(char *text) {
     text[strcspn(text, "\n")] = '\0';
 }
 
+// Vypíše všechny produkty ve skladu
 void vypisProdukty(Produkt sklad[], int pocet) {
+    // Pokud je sklad prázdný
     if (pocet == 0) {
         printf("Sklad je prazdny.\n");
         return;
     }
 
     printf("\nINDEX | NAZEV | CENA | KUSY\n");
+    // Výpis všech produktů
     for (int i = 0; i < pocet; i++) {
         printf("%d | %s | %.2f | %d\n",
                i, sklad[i].nazev, sklad[i].cena, sklad[i].kusy);
     }
 }
 
+// Vyhledá produkt podle přesného názvu
 void vyhledatNazev(Produkt sklad[], int pocet) {
     char hledany[50];
 
@@ -33,6 +39,7 @@ void vyhledatNazev(Produkt sklad[], int pocet) {
     fgets(hledany, sizeof(hledany), stdin);
     odstranNovyRadek(hledany);
 
+    // Projde všechny produkty a porovná názvy
     for (int i = 0; i < pocet; i++) {
         if (strcmp(sklad[i].nazev, hledany) == 0) {
             printf("Nalezen produkt (index %d): %s | %.2f | %d ks\n",
@@ -41,9 +48,10 @@ void vyhledatNazev(Produkt sklad[], int pocet) {
         }
     }
 
-    printf("Produkt nebyl nalezen.\n");
+    printf("Produkt nebyl nalezen.\n");  // Pokud se produkt nenašel
 }
 
+// Vyhledá produkty podle cenového rozmezí
 void vyhledatCenu(Produkt sklad[], int pocet) {
     float min, max;
 
@@ -53,6 +61,7 @@ void vyhledatCenu(Produkt sklad[], int pocet) {
     scanf("%f", &max);
     getchar(); // vycisteni bufferu
 
+    // Vypíše produkty, jejichž cena je v zadaném rozsahu
     for (int i = 0; i < pocet; i++) {
         if (sklad[i].cena >= min && sklad[i].cena <= max) {
             printf("%d | %s | %.2f | %d\n",
@@ -61,6 +70,7 @@ void vyhledatCenu(Produkt sklad[], int pocet) {
     }
 }
 
+// Zobrazí detail jednoho produktu podle indexu
 void detailProduktu(Produkt sklad[], int pocet) {
     int index;
 
@@ -68,11 +78,13 @@ void detailProduktu(Produkt sklad[], int pocet) {
     scanf("%d", &index);
     getchar();
 
+    // Kontrola platnosti indexu
     if (index < 0 || index >= pocet) {
         printf("Neplatny index.\n");
         return;
     }
 
+    // Výpis detailních informací
     printf("\nDETAIL PRODUKTU\n");
     printf("Index: %d\n", index);
     printf("Nazev: %s\n", sklad[index].nazev);
@@ -80,6 +92,7 @@ void detailProduktu(Produkt sklad[], int pocet) {
     printf("Kusy: %d\n", sklad[index].kusy);
 }
 
+// Odstraní produkt ze skladu podle indexu
 void odstranitProdukt(Produkt sklad[], int *pocet) {
     int index;
 
@@ -92,6 +105,7 @@ void odstranitProdukt(Produkt sklad[], int *pocet) {
         return;
     }
 
+    // Posunutí produktů doleva (přepsání odstraněného)
     for (int i = index; i < *pocet - 1; i++) {
         sklad[i] = sklad[i + 1];
     }
@@ -100,6 +114,7 @@ void odstranitProdukt(Produkt sklad[], int *pocet) {
     printf("Produkt byl odstranen.\n");
 }
 
+// Upraví existující produkt
 void upravitProdukt(Produkt sklad[], int pocet) {
     int index;
 
@@ -112,6 +127,7 @@ void upravitProdukt(Produkt sklad[], int pocet) {
         return;
     }
 
+    // Zadání nových hodnot
     printf("Novy nazev: ");
     fgets(sklad[index].nazev, sizeof(sklad[index].nazev), stdin);
     odstranNovyRadek(sklad[index].nazev);
@@ -136,6 +152,7 @@ int main() {
     int pocet = 3;
     char volba;
 
+    // Hlavní menu programu
     do {
         printf("\n--- MENU ---\n");
         printf("1 - Vypis produktu\n");
@@ -150,6 +167,7 @@ int main() {
         scanf(" %c", &volba);
         getchar();
 
+        // Reakce na volbu uživatele
         switch (volba) {
             case '1': vypisProdukty(sklad, pocet); break;
             case '2': vyhledatNazev(sklad, pocet); break;
